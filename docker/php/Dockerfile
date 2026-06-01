@@ -24,7 +24,9 @@ RUN apk add --no-cache \
     && docker-php-ext-install pdo_mysql pcntl \
     && pecl install rdkafka redis \
     && docker-php-ext-enable rdkafka redis \
-    && apk del .build-deps
+    && apk del .build-deps \
+
+
 
 COPY --from=composer-deps /app /var/www/html
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
