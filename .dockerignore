@@ -1,0 +1,11 @@
+.git
+.github
+node_modules
+vendor
+*.log
+.env
+.env.*
+!.env.example
+docker-compose*.yml
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
