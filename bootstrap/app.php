@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register our new tenant middleware alias
         $middleware->alias([
             'tenant' => \App\Http\Middleware\SetTenantContext::class,
+            'auth.apikey' => \App\Http\Middleware\AuthenticateApiKey::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
