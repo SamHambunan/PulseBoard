@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Services\MetricFanoutService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Junges\Kafka\Contracts\MessageConsumer;
 use Junges\Kafka\Facades\Kafka;
 use Junges\Kafka\Contracts\ConsumerMessage;
 
@@ -50,8 +51,6 @@ class ConsumeMetrics extends Command
      * this method initializes the kafka consumer, listens for incoming
      * messages, validates them, and forwards them to the fan-out service.
      *
-     * @param MetricFanoutService $fanout
-     * @return int
      */
     public function handle(MetricFanoutService $fanout): int
     {
@@ -82,7 +81,7 @@ class ConsumeMetrics extends Command
              *
              * processes each kafka message individually.
              */
-            ->withHandler(function (ConsumerMessage $message) use ($fanout) {
+            ->withHandler(function (ConsumerMessage $message, MessageConsumer $consumer) use ($fanout) {
 
                 try {
                     /**
@@ -97,7 +96,7 @@ class ConsumeMetrics extends Command
                         Log::warning('kafka.consumer.invalid_payload', [
                             'payload' => $payload,
                         ]);
-
+                        $consumer->commit($message);
                         return; // skip invalid message
                     }
 
@@ -105,6 +104,7 @@ class ConsumeMetrics extends Command
                      * forward valid payload to fan-out service.
                      */
                     $fanout->publish($payload);
+                    $consumer->commit($message);
 
                 } catch (\Throwable $e) {
 
