@@ -14,6 +14,10 @@ RUN composer dump-autoload --optimize --no-dev --no-scripts
 
 # ─── Stage 2: Shared PHP base ───────────────────────────────────────────────
 FROM php:8.3-fpm-alpine AS base
+
+ARG UID=1000
+ARG GID=1000
+
 WORKDIR /var/www/html
 
 RUN apk add --no-cache \
@@ -24,15 +28,16 @@ RUN apk add --no-cache \
     && docker-php-ext-install pdo_mysql pcntl \
     && pecl install rdkafka redis \
     && docker-php-ext-enable rdkafka redis \
-    && apk del .build-deps \
-
-
+    && apk del .build-deps
 
 COPY --from=composer-deps /app /var/www/html
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN addgroup -g ${GID} -S appgroup \
+    && adduser -u ${UID} -S appuser -G appgroup
+
 RUN chown -R appuser:appgroup /var/www/html
+
 USER appuser
 
 # ─── Stage 3: API service (PHP-FPM) ─────────────────────────────────────────
