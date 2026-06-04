@@ -12,9 +12,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/ingest', [\App\Http\Controllers\IngestController::class, 'store'])
         ->middleware('auth.apikey');
 
+    // Authenticated & Tenant-Scoped routes
     Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-        // adding Dashboards, Metrics, etc. here later
+        // Custom Broadcast Auth Endpoint
+        Route::post('/broadcasting/auth', [\App\Http\Controllers\BroadcastAuthController::class, 'authenticate']);
     });
 });
