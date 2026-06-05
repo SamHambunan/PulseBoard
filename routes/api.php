@@ -15,6 +15,7 @@ Route::prefix('v1')->group(function () {
     // Authenticated & Tenant-Scoped routes
     Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
+        Route::get('/snapshots/{metric}', [\App\Http\Controllers\MetricController::class, 'snapshot']);
 
         // Custom Broadcast Auth Endpoint
         Route::post('/broadcasting/auth', [\App\Http\Controllers\BroadcastAuthController::class, 'authenticate']);
