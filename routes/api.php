@@ -16,7 +16,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         Route::get('/snapshots/{metric}', [\App\Http\Controllers\MetricController::class, 'snapshot']);
-
+        Route::get('/metrics/{metric}/history', [\App\Http\Controllers\MetricController::class, 'history']);
         // Custom Broadcast Auth Endpoint
         Route::post('/broadcasting/auth', [\App\Http\Controllers\BroadcastAuthController::class, 'authenticate']);
     });

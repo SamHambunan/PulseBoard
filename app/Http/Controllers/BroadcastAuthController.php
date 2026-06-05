@@ -14,9 +14,6 @@ class BroadcastAuthController extends Controller
         $user    = $request->user();
         $channel = $request->input('channel_name');
 
-        dump(
-            get_class(app(Broadcaster::class))
-        );
         // Cache the authorization result for 30 seconds to prevent DB hammering
         $cacheKey = "broadcast_auth:{$user->id}:" . md5((string) $channel);
         $auth = Cache::remember($cacheKey, 30, function () use ($request) {
