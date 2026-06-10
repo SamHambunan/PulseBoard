@@ -15,4 +15,9 @@ class Dashboard extends Model
         'created_by',
         'name',
     ];
+
+    public function widgets()
+    {
+        return $this->hasMany(Widget::class);
+    }
 }

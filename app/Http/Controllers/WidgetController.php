@@ -2,47 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\WidgetRequest;
+use App\Models\Dashboard;
+use App\Models\Widget;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class WidgetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // note: The $dashboard parameter is automatically injected by Laravel because
+    // the route URL will be: POST /api/v1/dashboards/{dashboard}/widgets
+    public function store(WidgetRequest $request, Dashboard $dashboard): JsonResponse
     {
-        //
+        // check if the user is allowed to edit this specific dashboard
+        Gate::authorize('update', $dashboard);
+
+        // we use the dashboard's relationship to automatically stamp the dashboard_id
+        $widget = $dashboard->widgets()->create($request->validated());
+
+        return response()->json($widget, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(WidgetRequest $request, Widget $widget): JsonResponse
     {
-        //
+        Gate::authorize('update', $widget);
+
+        $widget->update($request->validated());
+
+        return response()->json($widget);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Widget $widget): JsonResponse
     {
-        //
-    }
+        Gate::authorize('delete', $widget);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $widget->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(null, 204);
     }
 }

@@ -19,6 +19,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/metrics/{metric}/history', [\App\Http\Controllers\MetricController::class, 'history']);
         // API Resource Routes for Dashboards
         Route::apiResource('dashboards', \App\Http\Controllers\DashboardController::class);
+        Route::apiResource('dashboards.widgets', \App\Http\Controllers\WidgetController::class)
+            ->shallow()
+            ->only(['store', 'update', 'destroy']);
         // Custom Broadcast Auth Endpoint
         Route::post('/broadcasting/auth', [\App\Http\Controllers\BroadcastAuthController::class, 'authenticate']);
     });
