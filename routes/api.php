@@ -22,6 +22,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('dashboards.widgets', \App\Http\Controllers\WidgetController::class)
             ->shallow()
             ->only(['store', 'update', 'destroy']);
+        // Presence Endpoint
+        Route::get('dashboards/{dashboard}/presence', [\App\Http\Controllers\PresenceController::class, 'index']);
         // Custom Broadcast Auth Endpoint
         Route::post('/broadcasting/auth', [\App\Http\Controllers\BroadcastAuthController::class, 'authenticate']);
     });
