@@ -8,7 +8,7 @@ shell:
 	docker compose exec app bash
 
 test:
-	docker compose exec app php artisan test --parallel
+	docker compose exec app php artisan test
 
 migrate:
 	docker compose exec app php artisan migrate --seed

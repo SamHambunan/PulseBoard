@@ -6,6 +6,7 @@ use App\Models\ApiKey;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Redis;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 use Tests\TestCase;
 
 /**
@@ -28,6 +29,7 @@ use Tests\TestCase;
  */
 class IngestRateLimitTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /**
@@ -46,6 +48,7 @@ class IngestRateLimitTest extends TestCase
      *
      * @return void
      */
+
     public function test_rate_limit_blocks_after_1000_requests()
     {
         /**
@@ -79,6 +82,7 @@ class IngestRateLimitTest extends TestCase
          * rate_limit:{api_key_hash}
          */
         Redis::set("rate_limit:{$keyHash}", 1000);
+
 
         /**
          * submit the next request.

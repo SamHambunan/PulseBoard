@@ -5,6 +5,7 @@ namespace Tests\Feature\Ingest;
 use App\Models\ApiKey;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 /**
@@ -46,6 +47,7 @@ class IngestValidationTest extends TestCase
      * each test can focus exclusively on request validation behavior.
      *
      */
+
     protected function setUp(): void
     {
         parent::setUp();

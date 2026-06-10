@@ -6,6 +6,7 @@ use App\Models\ApiKey;
 use App\Models\Tenant;
 use App\Services\KafkaProducerService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 use Mockery\MockInterface;
 
@@ -51,6 +52,7 @@ class IngestProducesKafkaTest extends TestCase
      *
      * @return void
      */
+
         public function test_valid_request_produces_to_kafka_and_returns_202()
         {
             /**
