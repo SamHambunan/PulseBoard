@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  *
  * this simply generates fake companies for testing purposes
  */
-
 class TenantFactory extends Factory
 {
     public function definition(): array

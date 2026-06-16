@@ -5,8 +5,6 @@ namespace Tests\Feature\Ingest;
 use App\Models\ApiKey;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 /**
@@ -48,7 +46,7 @@ class IngestAuthTest extends TestCase
     {
         $response = $this->postJson('/api/v1/ingest', [
             'metric' => 'cpu_usage',
-            'value'  => 55.5,
+            'value' => 55.5,
         ]);
 
         $response
@@ -77,7 +75,7 @@ class IngestAuthTest extends TestCase
         $response = $this->withToken('fake_invalid_key')
             ->postJson('/api/v1/ingest', [
                 'metric' => 'cpu_usage',
-                'value'  => 55.5,
+                'value' => 55.5,
             ]);
 
         $response
@@ -114,9 +112,9 @@ class IngestAuthTest extends TestCase
          * create a revoked api key.
          */
         $apiKey = ApiKey::create([
-            'tenant_id'  => $tenant->id,
-            'name'       => 'Test Key',
-            'key_hash'   => hash('sha256', 'secret_key_123'),
+            'tenant_id' => $tenant->id,
+            'name' => 'Test Key',
+            'key_hash' => hash('sha256', 'secret_key_123'),
             'revoked_at' => now(),
         ]);
 
@@ -126,7 +124,7 @@ class IngestAuthTest extends TestCase
         $response = $this->withToken('secret_key_123')
             ->postJson('/api/v1/ingest', [
                 'metric' => 'cpu_usage',
-                'value'  => 55.5,
+                'value' => 55.5,
             ]);
 
         $response->assertStatus(401);

@@ -12,6 +12,7 @@ class WidgetPolicy
     public function create(User $user): bool
     {
         $dashboard = Dashboard::findOrFail(request()->route('dashboard'));
+
         return $user->can('update', $dashboard);
     }
 

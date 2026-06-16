@@ -11,9 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * intended for Eloquent models participating in
  * multi-tenant isolation.
- *
  */
-
 trait BelongsToTenant
 {
     protected static function bootBelongsToTenant(): void

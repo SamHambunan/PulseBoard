@@ -31,7 +31,7 @@ class ChannelAuthTest extends TestCase
         // attempt to authenticate against the tenant's presence channel
         $response = $this->actingAs($user)->postJson('/api/v1/broadcasting/auth', [
             'channel_name' => "presence-dashboard.{$tenant->id}",
-            'socket_id'    => '12345.67890', // required by reverb
+            'socket_id' => '12345.67890', // required by reverb
         ]);
 
         // a 200 response indicates the channel authorization succeeded
@@ -70,7 +70,7 @@ class ChannelAuthTest extends TestCase
         // attempt to authenticate to another tenant's channel
         $response = $this->actingAs($userA)->postJson('/api/v1/broadcasting/auth', [
             'channel_name' => "presence-dashboard.{$tenantB->id}",
-            'socket_id'    => '12345.67890',
+            'socket_id' => '12345.67890',
         ]);
 
         // a 403 response indicates authorization was correctly denied

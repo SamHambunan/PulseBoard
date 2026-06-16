@@ -5,9 +5,9 @@ namespace App\Console\Commands;
 use App\Services\MetricFanoutService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Junges\Kafka\Contracts\ConsumerMessage;
 use Junges\Kafka\Contracts\MessageConsumer;
 use Junges\Kafka\Facades\Kafka;
-use Junges\Kafka\Contracts\ConsumerMessage;
 
 /**
  * class consumemetrics
@@ -50,7 +50,6 @@ class ConsumeMetrics extends Command
      *
      * this method initializes the kafka consumer, listens for incoming
      * messages, validates them, and forwards them to the fan-out service.
-     *
      */
     public function handle(MetricFanoutService $fanout): int
     {
@@ -97,6 +96,7 @@ class ConsumeMetrics extends Command
                             'payload' => $payload,
                         ]);
                         $consumer->commit($message);
+
                         return; // skip invalid message
                     }
 
@@ -115,7 +115,7 @@ class ConsumeMetrics extends Command
                      * supervisor/systemd so the consumer can restart.
                      */
                     Log::error('kafka.consumer.error', [
-                        'error'   => $e->getMessage(),
+                        'error' => $e->getMessage(),
                         'payload' => $message->getBody(),
                     ]);
 
@@ -137,7 +137,6 @@ class ConsumeMetrics extends Command
      *
      * ensures the message contains all required fields
      * and that value is numeric before processing.
-     *
      */
     private function validate(mixed $payload): bool
     {
@@ -146,11 +145,11 @@ class ConsumeMetrics extends Command
         }
 
         return isset(
-                $payload['tenant_id'],
-                $payload['metric'],
-                $payload['value'],
-                $payload['ts']
-            )
+            $payload['tenant_id'],
+            $payload['metric'],
+            $payload['value'],
+            $payload['ts']
+        )
             && is_numeric($payload['value']);
     }
 }

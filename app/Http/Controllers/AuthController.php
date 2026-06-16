@@ -22,10 +22,8 @@ use Illuminate\Support\Str;
  * - authenticate existing users
  * - revoke active access tokens
  */
-
 class AuthController extends Controller
 {
-
     /**
      * register a new tenant and owner account.
      *
@@ -52,40 +50,38 @@ class AuthController extends Controller
             // tenant-scoped models can be created successfully.
             app()->instance('current.tenant.id', $tenant->id);
 
-
             // create the first user and assign ownership of
             // the newly created workspace.
             $user = User::create([
-                'tenant_id'      => $tenant->id,
-                'name'           => $request->name,
-                'email'          => $request->email,
-                'password'       => Hash::make($request->password),
+                'tenant_id' => $tenant->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
                 'workspace_role' => 'owner', // First user is the owner
             ]);
 
-
             // provision a starter dashboard for new tenants.
             Dashboard::create([
-                'tenant_id'  => $tenant->id,
+                'tenant_id' => $tenant->id,
                 'created_by' => $user->id,
-                'name'       => 'Default Dashboard',
+                'name' => 'Default Dashboard',
             ]);
 
             // generated the default ingestion key.
             // only the hashed version is stored.
-            $rawApiKey = 'pb_' . Str::random(40);
+            $rawApiKey = 'pb_'.Str::random(40);
             ApiKey::create([
                 'tenant_id' => $tenant->id,
-                'name'      => 'Default Ingestion Key',
-                'key_hash'  => hash('sha256', $rawApiKey),
+                'name' => 'Default Ingestion Key',
+                'key_hash' => hash('sha256', $rawApiKey),
             ]);
 
             // create a Sanctum access token for immediate login.
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return [
-                'user'    => $user,
-                'token'   => $token,
+                'user' => $user,
+                'token' => $token,
 
                 // the raw API key is only available during creation.
                 // it cannot be recovered after this response.
@@ -120,7 +116,7 @@ class AuthController extends Controller
      */
     public function logout(): JsonResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = request()->user();
         $user->currentAccessToken()->delete();
 

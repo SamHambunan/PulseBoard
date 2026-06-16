@@ -18,10 +18,8 @@ use Illuminate\Support\Facades\DB;
  * dashboard permissions for members/viewers are stored
  * in the dashboard_user pivot table.
  */
-
 class DashboardPolicy
 {
-
     /**
      * determine whether the user can view a dashboard.
      *

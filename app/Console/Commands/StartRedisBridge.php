@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
 /**
- *
  * laravel artisan command that bridges real-time metrics from redis pub/sub
  * to websocket clients via the MetricUpdated event.
  *
@@ -46,8 +45,6 @@ class StartRedisBridge extends Command
      * - decodes messages (json) from redis
      * - dispatches them as MetricUpdated events to broadcast to websockets
      * - logs each broadcast
-     *
-     * @return void
      */
     public function handle(): void
     {

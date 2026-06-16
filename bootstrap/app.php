@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\AuthenticateApiKey;
+use App\Http\Middleware\SetTenantContext;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,8 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Register our new tenant middleware alias
         $middleware->alias([
-            'tenant' => \App\Http\Middleware\SetTenantContext::class,
-            'auth.apikey' => \App\Http\Middleware\AuthenticateApiKey::class
+            'tenant' => SetTenantContext::class,
+            'auth.apikey' => AuthenticateApiKey::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

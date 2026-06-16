@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * this middleware should run after authentication middleware.
  */
-
 class SetTenantContext
 {
     public function handle(Request $request, Closure $next): Response

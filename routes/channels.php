@@ -12,7 +12,7 @@ Broadcast::channel('dashboard.{tenantId}', function (User $user, string $tenantI
 
     // 2. Return presence data (This powers the "Who's Online" feature)
     return [
-        'id'   => $user->id,
+        'id' => $user->id,
         'name' => $user->name,
     ];
 });

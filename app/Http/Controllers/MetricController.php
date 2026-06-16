@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TimestreamService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -35,9 +37,8 @@ class MetricController extends Controller
      *   ts: string|null
      * }
      *
-     * @param request $request http request instance
-     * @param string $metric metric name being requested
-     * @return jsonresponse
+     * @param  Request  $request  http request instance
+     * @param  string  $metric  metric name being requested
      */
     public function snapshot(Request $request, string $metric): JsonResponse
     {
@@ -52,7 +53,7 @@ class MetricController extends Controller
             return response()->json([
                 'value' => null,
                 'delta' => null,
-                'ts'    => null
+                'ts' => null,
             ]);
         }
 
@@ -81,9 +82,8 @@ class MetricController extends Controller
      *   range: string
      * }
      *
-     * @param request $request http request instance
-     * @param string $metric metric name being requested
-     * @return jsonresponse
+     * @param  Request  $request  http request instance
+     * @param  string  $metric  metric name being requested
      */
     public function history(Request $request, string $metric): JsonResponse
     {
@@ -98,17 +98,17 @@ class MetricController extends Controller
 
         // cache layer prevents repeated aws timestream queries
         // ttl: 30 seconds
-        $data = \Illuminate\Support\Facades\Cache::remember(
+        $data = Cache::remember(
             $cacheKey,
             30,
-            fn() => app(\App\Services\TimestreamService::class)
+            fn () => app(TimestreamService::class)
                 ->query($tenantId, $metric, $range)
         );
 
         // return historical dataset with applied range context
         return response()->json([
-            'data'  => $data,
-            'range' => $range
+            'data' => $data,
+            'range' => $range,
         ]);
     }
 }

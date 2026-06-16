@@ -15,10 +15,10 @@ use Tests\TestCase;
  * correctly restricts data access through global scopes, ensuring that
  * users can only access records belonging to their own tenant.
  */
-
 class TenantIsolationTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * verify that the tenant global scope prevents cross-tenant data access.
      *
@@ -33,7 +33,6 @@ class TenantIsolationTest extends TestCase
      * 3. verify that both dashboards exist in the database.
      * 4. simulate Tenant A's context.
      * 5. confirm that Tenant A can only retrieve its own dashboard.
-     *
      */
     public function test_global_scope_prevents_cross_tenant_data_leaks()
     {

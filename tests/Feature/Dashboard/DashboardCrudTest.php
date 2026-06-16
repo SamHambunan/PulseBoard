@@ -36,12 +36,12 @@ class DashboardCrudTest extends TestCase
         $widgetResponse = $this->actingAs($owner)->postJson(
             "/api/v1/dashboards/{$dashboardId}/widgets",
             [
-                'type'       => 'line_chart',
+                'type' => 'line_chart',
                 'position_x' => 0,
                 'position_y' => 0,
-                'width'      => 6,
-                'height'     => 4,
-                'config'     => [
+                'width' => 6,
+                'height' => 4,
+                'config' => [
                     'metric' => 'cpu_usage',
                 ],
             ]
@@ -52,13 +52,13 @@ class DashboardCrudTest extends TestCase
 
         // confirm dashboard record exists in the database
         $this->assertDatabaseHas('dashboards', [
-            'name'      => 'Server Metrics',
+            'name' => 'Server Metrics',
             'tenant_id' => $tenant->id,
         ]);
 
         // confirm widget record exists and is linked to the dashboard
         $this->assertDatabaseHas('widgets', [
-            'type'         => 'line_chart',
+            'type' => 'line_chart',
             'dashboard_id' => $dashboardId,
         ]);
     }
@@ -96,7 +96,7 @@ class DashboardCrudTest extends TestCase
         );
 
         // verify access is denied
-        dump('Status Code: ' . $response->getStatusCode());
+        dump('Status Code: '.$response->getStatusCode());
         $response->assertStatus(403);
     }
 

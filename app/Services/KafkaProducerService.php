@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use RdKafka\Conf;
+use RdKafka\Producer;
+
 /**
  * configuration:
  * - kafka brokers are loaded from the application configuration.
@@ -17,9 +20,8 @@ class KafkaProducerService
 {
     /**
      * kafka producer instance.
-     *
      */
-    private \RdKafka\Producer $producer;
+    private Producer $producer;
 
     /**
      * create a new kafka producer instance.
@@ -30,7 +32,7 @@ class KafkaProducerService
      */
     public function __construct()
     {
-        $conf = new \RdKafka\Conf();
+        $conf = new Conf;
 
         $conf->set(
             'metadata.broker.list',
@@ -40,7 +42,7 @@ class KafkaProducerService
         // timeout quickly if kafka is down so we do not freeze the api
         $conf->set('socket.timeout.ms', '5000');
 
-        $this->producer = new \RdKafka\Producer($conf);
+        $this->producer = new Producer($conf);
     }
 
     /**
@@ -66,7 +68,6 @@ class KafkaProducerService
      * - tenant-123
      * - customer-456
      * - organization-789
-     *
      */
     public function produce(string $topicName, array $payload, string $partitionKey): void
     {

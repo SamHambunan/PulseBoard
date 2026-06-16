@@ -43,18 +43,17 @@ class WriteMetricToTimestream implements ShouldQueue
     /**
      * job constructor
      *
-     * @param array $payload
-     *  expected structure:
-     *  [
-     *      'tenant_id' => string,
-     *      'metric'    => string,
-     *      'value'     => int|float|string,
-     *      'source'    => string|null,
-     *      'ts'        => unix timestamp (int)
-     *  ]
-     *
-     * @param float|null $delta
-     *  optional change in value compared to previous metric point
+     * @param  array  $payload
+     *                          expected structure:
+     *                          [
+     *                          'tenant_id' => string,
+     *                          'metric'    => string,
+     *                          'value'     => int|float|string,
+     *                          'source'    => string|null,
+     *                          'ts'        => unix timestamp (int)
+     *                          ]
+     * @param  float|null  $delta
+     *                             optional change in value compared to previous metric point
      */
     public function __construct(
         private readonly array $payload,
@@ -68,19 +67,16 @@ class WriteMetricToTimestream implements ShouldQueue
      * timestreamservice abstraction layer.
      *
      * this method is executed by laravel queue workers.
-     *
-     * @param timestreamservice $timestream
-     * @return void
      */
     public function handle(TimestreamService $timestream): void
     {
         $timestream->write(
             tenantId: $this->payload['tenant_id'],
-            metric:   $this->payload['metric'],
-            value:    (float) $this->payload['value'],
-            delta:    $this->delta,
-            source:   $this->payload['source'] ?? 'unknown',
-            ts:       (int) $this->payload['ts']
+            metric: $this->payload['metric'],
+            value: (float) $this->payload['value'],
+            delta: $this->delta,
+            source: $this->payload['source'] ?? 'unknown',
+            ts: (int) $this->payload['ts']
         );
     }
 }

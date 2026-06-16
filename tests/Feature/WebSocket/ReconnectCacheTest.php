@@ -17,8 +17,6 @@ class ReconnectCacheTest extends TestCase
      *
      * this prevents cache entries from leaking between tests
      * and ensures each test runs in a predictable state.
-     *
-     * @return void
      */
     protected function tearDown(): void
     {
@@ -56,11 +54,11 @@ class ReconnectCacheTest extends TestCase
         // and populate the cache
         $this->actingAs($user)->postJson('/api/v1/broadcasting/auth', [
             'channel_name' => $channel,
-            'socket_id'    => '12345.67890',
+            'socket_id' => '12345.67890',
         ])->assertStatus(200);
 
         // build the cache key used by the controller
-        $cacheKey = "broadcast_auth:{$user->id}:" . md5($channel);
+        $cacheKey = "broadcast_auth:{$user->id}:".md5($channel);
 
         // verify that the authorization result was stored
         $this->assertTrue(Cache::has($cacheKey));
@@ -71,7 +69,7 @@ class ReconnectCacheTest extends TestCase
         // send a second authentication request for the same channel
         $this->actingAs($user)->postJson('/api/v1/broadcasting/auth', [
             'channel_name' => $channel,
-            'socket_id'    => '12345.67890',
+            'socket_id' => '12345.67890',
         ])->assertStatus(200);
 
         // verify that the cache layer was consulted using

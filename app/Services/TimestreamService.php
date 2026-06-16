@@ -2,14 +2,16 @@
 
 namespace App\Services;
 
-use Aws\TimestreamWrite\TimestreamWriteClient;
 use Aws\TimestreamQuery\TimestreamQueryClient;
+use Aws\TimestreamWrite\TimestreamWriteClient;
 use Illuminate\Support\Facades\Log;
 
 class TimestreamService
 {
     private ?TimestreamWriteClient $writer = null;
+
     private ?TimestreamQueryClient $querier = null;
+
     private bool $isLocal;
 
     public function __construct()
@@ -27,23 +29,24 @@ class TimestreamService
     {
         if ($this->isLocal) {
             Log::info("Mock Timestream Write: [$tenantId] $metric = $value");
+
             return;
         }
 
         $this->writer->writeRecords([
             'DatabaseName' => env('AWS_TIMESTREAM_DB', 'pulseboard'),
-            'TableName'    => 'metrics',
-            'Records'      => [[
+            'TableName' => 'metrics',
+            'Records' => [[
                 'Dimensions' => [
                     ['Name' => 'tenant_id', 'Value' => $tenantId],
                     ['Name' => 'metric',    'Value' => $metric],
                     ['Name' => 'source',    'Value' => $source],
                 ],
-                'MeasureName'  => 'value',
+                'MeasureName' => 'value',
                 'MeasureValue' => (string) $value,
                 'MeasureValueType' => 'DOUBLE',
-                'Time'         => (string) $ts,
-                'TimeUnit'     => 'MILLISECONDS',
+                'Time' => (string) $ts,
+                'TimeUnit' => 'MILLISECONDS',
             ]],
         ]);
     }
@@ -53,6 +56,7 @@ class TimestreamService
         if ($this->isLocal) {
             // Mock data for local development charts
             $now = round(microtime(true) * 1000);
+
             return [
                 ['ts' => $now - 300000, 'value' => rand(40, 50)],
                 ['ts' => $now - 150000, 'value' => rand(50, 60)],
@@ -61,10 +65,10 @@ class TimestreamService
         }
 
         $interval = match ($range) {
-            '5m'  => '5 MINUTES',
-            '1h'  => '1 HOURS',
+            '5m' => '5 MINUTES',
+            '1h' => '1 HOURS',
             '24h' => '24 HOURS',
-            '7d'  => '7 DAYS',
+            '7d' => '7 DAYS',
             default => '1 HOURS',
         };
 
@@ -74,8 +78,8 @@ class TimestreamService
         $result = $this->querier->query(['QueryString' => $sql]);
 
         return collect($result['Rows'])
-            ->map(fn($row) => [
-                'ts'    => strtotime($row['Data'][0]['ScalarValue']) * 1000,
+            ->map(fn ($row) => [
+                'ts' => strtotime($row['Data'][0]['ScalarValue']) * 1000,
                 'value' => (float) $row['Data'][1]['ScalarValue'],
             ])
             ->all();

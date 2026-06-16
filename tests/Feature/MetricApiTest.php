@@ -50,17 +50,17 @@ class MetricApiTest extends TestCase
     public function test_snapshot_returns_last_known_value_from_redis()
     {
         $tenant = Tenant::factory()->create();
-        $user   = User::factory()->create(['tenant_id' => $tenant->id]);
+        $user = User::factory()->create(['tenant_id' => $tenant->id]);
 
         // seed redis with a fake metric snapshot
         $snapshotKey = "snapshot:{$tenant->id}:cpu_usage";
 
         $payload = json_encode([
             'tenant_id' => $tenant->id,
-            'metric'    => 'cpu_usage',
-            'value'     => 88.5,
-            'delta'     => 2.5,
-            'ts'        => 1600000000000,
+            'metric' => 'cpu_usage',
+            'value' => 88.5,
+            'delta' => 2.5,
+            'ts' => 1600000000000,
         ]);
 
         Redis::set($snapshotKey, $payload);
@@ -87,7 +87,7 @@ class MetricApiTest extends TestCase
     public function test_snapshot_returns_null_if_redis_is_empty()
     {
         $tenant = Tenant::factory()->create();
-        $user   = User::factory()->create(['tenant_id' => $tenant->id]);
+        $user = User::factory()->create(['tenant_id' => $tenant->id]);
 
         // act: request metric that does not exist in redis
         $response = $this
@@ -99,7 +99,7 @@ class MetricApiTest extends TestCase
             ->assertJson([
                 'value' => null,
                 'delta' => null,
-                'ts'    => null,
+                'ts' => null,
             ]);
     }
 
@@ -114,7 +114,7 @@ class MetricApiTest extends TestCase
     public function test_history_endpoint_returns_mock_data_and_caches_it()
     {
         $tenant = Tenant::factory()->create();
-        $user   = User::factory()->create(['tenant_id' => $tenant->id]);
+        $user = User::factory()->create(['tenant_id' => $tenant->id]);
 
         // spy on cache to ensure caching behavior is triggered
         $spy = Cache::spy();
@@ -128,9 +128,9 @@ class MetricApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['ts', 'value']
+                    '*' => ['ts', 'value'],
                 ],
-                'range'
+                'range',
             ]);
 
         // assert: cache remember was called with correct key

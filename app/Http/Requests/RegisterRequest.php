@@ -17,7 +17,6 @@ use Illuminate\Foundation\Http\FormRequest;
  * - password must be at least 8 characters and match
  *   the password_confirmation field
  */
-
 class RegisterRequest extends FormRequest
 {
     public function authorize(): bool
@@ -29,9 +28,9 @@ class RegisterRequest extends FormRequest
     {
         return [
             'company_name' => ['required', 'string', 'max:255'],
-            'name'         => ['required', 'string', 'max:255'],
-            'email'        => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password'     => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 }

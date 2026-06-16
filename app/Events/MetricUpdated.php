@@ -28,18 +28,18 @@ class MetricUpdated implements ShouldBroadcast
     /**
      * create a new metric updated event instance
      *
-     * @param string      $tenantId  tenant identifier
-     * @param string      $metric    metric name (e.g., cpu_usage)
-     * @param float       $value     current metric value
-     * @param float|null  $delta     difference from previous metric value
-     * @param int         $ts        timestamp in milliseconds
+     * @param  string  $tenantId  tenant identifier
+     * @param  string  $metric  metric name (e.g., cpu_usage)
+     * @param  float  $value  current metric value
+     * @param  float|null  $delta  difference from previous metric value
+     * @param  int  $ts  timestamp in milliseconds
      */
     public function __construct(
         public readonly string $tenantId,
         public readonly string $metric,
-        public readonly float  $value,
+        public readonly float $value,
         public readonly ?float $delta,
-        public readonly int    $ts
+        public readonly int $ts
     ) {}
 
     /**
@@ -47,20 +47,16 @@ class MetricUpdated implements ShouldBroadcast
      *
      * uses a presence channel specific to each tenant,
      * allowing only authorized clients to subscribe.
-     *
-     * @return array
      */
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel("dashboard.{$this->tenantId}")
+            new PresenceChannel("dashboard.{$this->tenantId}"),
         ];
     }
 
     /**
      * define the event name when broadcasting.
-     *
-     * @return string
      */
     public function broadcastAs(): string
     {
@@ -71,16 +67,14 @@ class MetricUpdated implements ShouldBroadcast
      * define the payload sent to subscribers.
      *
      * only sends the fields needed for real-time dashboard updates.
-     *
-     * @return array
      */
     public function broadcastWith(): array
     {
         return [
             'metric' => $this->metric,
-            'value'  => $this->value,
-            'delta'  => $this->delta,
-            'ts'     => $this->ts,
+            'value' => $this->value,
+            'delta' => $this->delta,
+            'ts' => $this->ts,
         ];
     }
 }

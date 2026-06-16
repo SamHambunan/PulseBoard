@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Dashboard;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  * explicitly provided. It is primarily used for database seeding,
  * automated testing, and development environments.
  *
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Dashboard>
+ * @extends Factory<Dashboard>
  */
 class DashboardFactory extends Factory
 {
@@ -23,7 +24,6 @@ class DashboardFactory extends Factory
      *
      * generates a dashboard with a related tenant, creator user,
      * and a randomly generated dashboard name.
-     *
      */
     public function definition(): array
     {

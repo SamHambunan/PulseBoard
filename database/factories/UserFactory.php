@@ -7,14 +7,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-
 /**
  * factory for generating User model test and seed data.
  *
  * this factory creates fake user records and automatically generates
  * an associated tenant when one is not explicitly provided. It is
  * commonly used during database seeding, testing, and local development.
- *
  */
 class UserFactory extends Factory
 {

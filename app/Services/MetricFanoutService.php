@@ -6,7 +6,6 @@ use App\Jobs\WriteMetricToTimestream;
 use Illuminate\Support\Facades\Redis;
 
 /**
- *
  * responsible for distributing (fanout) metric events to multiple downstream systems.
  *
  * this service acts as a real-time processing layer that:
@@ -41,13 +40,12 @@ class MetricFanoutService
      *   'value'     => float|int|string,
      *   'ts'        => int (unix timestamp or milliseconds depending on system design)
      * ]
-     *
      */
     public function publish(array $payload): void
     {
         $tenantId = $payload['tenant_id'];
-        $metric   = $payload['metric'];
-        $value    = (float) $payload['value'];
+        $metric = $payload['metric'];
+        $value = (float) $payload['value'];
 
         /**
          * redis key used to store the last known snapshot
@@ -61,7 +59,7 @@ class MetricFanoutService
          * used to calculate delta between current and last value.
          */
         $prevRaw = Redis::get($snapshotKey);
-        $prev    = $prevRaw ? json_decode($prevRaw, true) : null;
+        $prev = $prevRaw ? json_decode($prevRaw, true) : null;
 
         /**
          * compute delta between current value and previous value.
@@ -79,10 +77,10 @@ class MetricFanoutService
          */
         $message = json_encode([
             'tenant_id' => $tenantId,
-            'metric'    => $metric,
-            'value'     => $value,
-            'delta'     => $delta,
-            'ts'        => $payload['ts'],
+            'metric' => $metric,
+            'value' => $value,
+            'delta' => $delta,
+            'ts' => $payload['ts'],
         ]);
 
         /**

@@ -29,13 +29,11 @@ class DashboardPolicyTest extends TestCase
 
     /**
      * active tenant used across all tests.
-     *
      */
     private Tenant $tenant;
 
     /**
      * dashboard instance used in tests.
-     *
      */
     private Dashboard $dashboard;
 
@@ -44,7 +42,6 @@ class DashboardPolicyTest extends TestCase
      *
      * creates a tenant, sets tenant context, creates an owner user,
      * and creates a dashboard for that tenant.
-     *
      */
     protected function setUp(): void
     {
@@ -74,7 +71,6 @@ class DashboardPolicyTest extends TestCase
      *
      * admins should be able to view, update, and delete dashboards
      * within their tenant.
-     *
      */
     public function test_owners_and_admins_can_manage_everything()
     {
@@ -93,7 +89,6 @@ class DashboardPolicyTest extends TestCase
      *
      * viewer users without pivot permissions should not be able to view
      * or update dashboards.
-     *
      */
     public function test_standard_user_cannot_view_without_permission()
     {
@@ -110,7 +105,6 @@ class DashboardPolicyTest extends TestCase
      * verify view permission allows reading only.
      *
      * users with only 'view' permission can view dashboards but cannot edit.
-     *
      */
     public function test_standard_user_with_view_permission_cannot_edit()
     {
@@ -121,8 +115,8 @@ class DashboardPolicyTest extends TestCase
 
         DB::table('dashboard_user')->insert([
             'dashboard_id' => $this->dashboard->id,
-            'user_id'      => $viewer->id,
-            'permission'   => 'view',
+            'user_id' => $viewer->id,
+            'permission' => 'view',
         ]);
 
         $this->assertTrue($viewer->can('view', $this->dashboard));
@@ -134,7 +128,6 @@ class DashboardPolicyTest extends TestCase
      *
      * users with 'edit' permission can update dashboards but only
      * owners/admins can delete them.
-     *
      */
     public function test_standard_user_with_edit_permission_cannot_delete()
     {
@@ -145,8 +138,8 @@ class DashboardPolicyTest extends TestCase
 
         DB::table('dashboard_user')->insert([
             'dashboard_id' => $this->dashboard->id,
-            'user_id'      => $member->id,
-            'permission'   => 'edit',
+            'user_id' => $member->id,
+            'permission' => 'edit',
         ]);
 
         $this->assertTrue($member->can('view', $this->dashboard));

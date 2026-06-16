@@ -10,7 +10,6 @@ use Illuminate\Foundation\Http\FormRequest;
  * ensures the required login credentials are present
  * before attempting authentication.
  */
-
 class LoginRequest extends FormRequest
 {
     public function authorize(): bool
@@ -21,7 +20,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ];
     }

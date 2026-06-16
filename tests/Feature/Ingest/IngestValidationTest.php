@@ -5,7 +5,6 @@ namespace Tests\Feature\Ingest;
 use App\Models\ApiKey;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 /**
@@ -31,8 +30,6 @@ class IngestValidationTest extends TestCase
 
     /**
      * valid api key used for authenticated test requests.
-     *
-     * @var string
      */
     private string $validKey = 'secret_key_123';
 
@@ -45,9 +42,7 @@ class IngestValidationTest extends TestCase
      *
      * the api key is used to bypass authentication concerns so that
      * each test can focus exclusively on request validation behavior.
-     *
      */
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -56,8 +51,8 @@ class IngestValidationTest extends TestCase
 
         ApiKey::create([
             'tenant_id' => $tenant->id,
-            'name'      => 'Test Key',
-            'key_hash'  => hash('sha256', $this->validKey),
+            'name' => 'Test Key',
+            'key_hash' => hash('sha256', $this->validKey),
         ]);
     }
 
@@ -73,7 +68,6 @@ class IngestValidationTest extends TestCase
      * - validation errors for:
      *   - metric
      *   - value
-     *
      */
     public function test_missing_metric_and_value_returns_422()
     {
@@ -106,14 +100,13 @@ class IngestValidationTest extends TestCase
      * expected result:
      * - http status 422.
      * - validation error for the metric field.
-     *
      */
     public function test_invalid_metric_name_returns_422()
     {
         $response = $this->withToken($this->validKey)
             ->postJson('/api/v1/ingest', [
                 'metric' => 'CPU Usage!!!',
-                'value'  => 55.5,
+                'value' => 55.5,
             ]);
 
         $response
@@ -133,14 +126,13 @@ class IngestValidationTest extends TestCase
      * expected result:
      * - http status 422.
      * - validation error for the value field.
-     *
      */
     public function test_value_must_be_numeric()
     {
         $response = $this->withToken($this->validKey)
             ->postJson('/api/v1/ingest', [
                 'metric' => 'cpu_usage',
-                'value'  => 'fifty-five',
+                'value' => 'fifty-five',
             ]);
 
         $response

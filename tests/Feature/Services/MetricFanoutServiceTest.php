@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 /**
- *
- *
  * this test suite verifies the core real-time processing pipeline:
  *
  * - redis snapshot storage
@@ -54,13 +52,13 @@ class MetricFanoutServiceTest extends TestCase
     {
         Queue::fake();
 
-        $service = new MetricFanoutService();
+        $service = new MetricFanoutService;
 
         $payload = [
             'tenant_id' => 'tenant-123',
-            'metric'    => 'cpu_usage',
-            'value'     => 50.0,
-            'ts'        => 1600000000000,
+            'metric' => 'cpu_usage',
+            'value' => 50.0,
+            'ts' => 1600000000000,
         ];
 
         // execute fan-out logic
@@ -96,22 +94,22 @@ class MetricFanoutServiceTest extends TestCase
     {
         Queue::fake();
 
-        $service = new MetricFanoutService();
+        $service = new MetricFanoutService;
 
         // first metric (baseline)
         $service->publish([
             'tenant_id' => 'tenant-123',
-            'metric'    => 'cpu_usage',
-            'value'     => 50.0,
-            'ts'        => 1600000000000,
+            'metric' => 'cpu_usage',
+            'value' => 50.0,
+            'ts' => 1600000000000,
         ]);
 
         // second metric (delta = +15.5)
         $service->publish([
             'tenant_id' => 'tenant-123',
-            'metric'    => 'cpu_usage',
-            'value'     => 65.5,
-            'ts'        => 1600000005000,
+            'metric' => 'cpu_usage',
+            'value' => 65.5,
+            'ts' => 1600000005000,
         ]);
 
         // verify updated snapshot in redis

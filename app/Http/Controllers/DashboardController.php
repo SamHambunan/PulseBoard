@@ -45,7 +45,7 @@ class DashboardController extends Controller
     public function store(DashboardRequest $request): JsonResponse
     {
         $dashboard = Dashboard::create([
-            'name'       => $request->name,
+            'name' => $request->name,
             'created_by' => $request->user()->id,
         ]);
 

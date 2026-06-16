@@ -16,7 +16,6 @@ use Tests\TestCase;
  * all required resources for a new tenant workspace, including the tenant,
  * user account, default dashboard, API key, and appropriate role assignment.
  */
-
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
@@ -33,17 +32,15 @@ class RegisterTest extends TestCase
      * - a default dashboard is provisioned.
      * - an API key is generated for workspace access.
      * - the registering user is assigned the owner role.
-     *
      */
-
     public function test_user_can_register_and_provisions_workspace()
     {
         // submit a registration request for a new workspace owner.
         $response = $this->postJson('/api/v1/auth/register', [
             'company_name' => 'Acme Corp',
-            'name'         => 'John Doe',
-            'email'        => 'john@example.com',
-            'password'     => 'password123',
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
 
@@ -55,18 +52,14 @@ class RegisterTest extends TestCase
         // verify that the tenant workspace was created.
         $this->assertEquals(1, Tenant::count());
 
-
         // verify that the user account was created.
         $this->assertEquals(1, User::count());
-
 
         // verify that a default dashboard was provisioned.
         $this->assertEquals(1, Dashboard::count());
 
-
         // verify that an API key was generated.
         $this->assertEquals(1, ApiKey::count());
-
 
         // verify that the registering user received owner privileges.
         $this->assertEquals('owner', User::first()->workspace_role);

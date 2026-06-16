@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Route;
+use RdKafka\Conf;
+use RdKafka\Producer;
 
 Route::get('/poc', function () {
     // Start the stopwatch
@@ -12,9 +14,9 @@ Route::get('/poc', function () {
     $redisResult = Redis::get('poc_test');
 
     // 2. Test Kafka (Produce a message)
-    $conf = new \RdKafka\Conf();
+    $conf = new Conf;
     $conf->set('metadata.broker.list', env('KAFKA_BROKERS', 'kafka:9092'));
-    $producer = new \RdKafka\Producer($conf);
+    $producer = new Producer($conf);
 
     $topic = $producer->newTopic('metrics.events');
     $topic->produce(
@@ -32,6 +34,6 @@ Route::get('/poc', function () {
         'status' => 'PoC Successful',
         'redis' => $redisResult,
         'kafka' => 'Message sent to metrics.events',
-        'latency_ms' => $latencyMs
+        'latency_ms' => $latencyMs,
     ]);
 });

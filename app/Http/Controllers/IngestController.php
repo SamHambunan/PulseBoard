@@ -28,7 +28,6 @@ class IngestController extends Controller
 {
     /**
      * create a new controller instance.
-
      */
     public function __construct(
         private RateLimiterService $limiter,
@@ -77,7 +76,6 @@ class IngestController extends Controller
      * {
      *     "error": "rate limit exceeded. maximum 1000 requests per minute."
      * }
-     *
      */
     public function store(IngestRequest $request): JsonResponse
     {
@@ -93,7 +91,7 @@ class IngestController extends Controller
          * check whether the api key has exceeded its
          * allowed request rate.
          */
-        if (!$this->limiter->allow($apiKey->key_hash)) {
+        if (! $this->limiter->allow($apiKey->key_hash)) {
             return response()->json([
                 'error' => 'Rate limit exceeded. Maximum 1000 requests per minute.',
             ], 429);

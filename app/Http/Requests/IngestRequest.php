@@ -29,8 +29,6 @@ class IngestRequest extends FormRequest
      *
      * authorization is delegated to the api key middleware, therefore
      * this request always returns true.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {

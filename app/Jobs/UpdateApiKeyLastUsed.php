@@ -19,7 +19,7 @@ class UpdateApiKeyLastUsed implements ShouldQueue
     {
         // we use a direct DB query here instead of loading the model to save milliseconds
         ApiKey::where('id', $this->apiKeyId)->update([
-            'last_used_at' => now()
+            'last_used_at' => now(),
         ]);
     }
 }

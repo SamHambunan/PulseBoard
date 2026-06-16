@@ -28,7 +28,6 @@ class AuthenticateApiKey
      * - enforce tenant context for multi-tenancy
      * - attach api key to request attributes
      * - dispatch background job to update last used timestamp
-     *
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -37,7 +36,7 @@ class AuthenticateApiKey
 
         abort_if(! $rawKey, 401, 'missing api key');
 
-        $cacheKey = 'api_key:' . hash('sha256', $rawKey);
+        $cacheKey = 'api_key:'.hash('sha256', $rawKey);
 
         // check cache first, fallback to database if missing
         $apiKey = Cache::remember($cacheKey, 30, function () use ($rawKey) {

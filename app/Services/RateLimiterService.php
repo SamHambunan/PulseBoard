@@ -32,7 +32,6 @@ class RateLimiterService
      * - increment request counter
      * - set expiration on first request
      * - return current count
-     *
      */
     public function allow(string $apiKeyHash): bool
     {

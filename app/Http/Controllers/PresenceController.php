@@ -27,7 +27,7 @@ class PresenceController extends Controller
             if ($data) {
                 // Return only non-sensitive data (id and name)
                 $users[] = [
-                    'id'   => $data['user_info']['id'] ?? null,
+                    'id' => $data['user_info']['id'] ?? null,
                     'name' => $data['user_info']['name'] ?? 'Unknown',
                 ];
             }
