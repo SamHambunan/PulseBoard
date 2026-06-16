@@ -15,9 +15,11 @@
         "mateusjunges/laravel-kafka": "^2.11"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.7",
         "brianium/paratest": "^7.0",
         "fakerphp/faker": "^1.23",
         "kwn/php-rdkafka-stubs": "^3.0",
+        "larastan/larastan": "^3.10",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",
         "laravel/pint": "^1.29",

@@ -85,6 +85,7 @@ class IngestController extends Controller
          * the middleware validates the incoming api key and
          * stores the corresponding model in the request attributes.
          */
+        dump('Reached the controller');
         $apiKey = $request->attributes->get('api_key');
 
         /**

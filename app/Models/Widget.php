@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Widget extends Model
 {
+    /**
+     * @property int $id
+     * @property int $dashboard_id
+     */
     protected $fillable = [
         'dashboard_id',
         'type',

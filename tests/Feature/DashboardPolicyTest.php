@@ -48,6 +48,7 @@ class DashboardPolicyTest extends TestCase
         parent::setUp();
 
         // create tenant for isolation
+
         $this->tenant = Tenant::factory()->create();
 
         // simulate middleware setting current tenant context

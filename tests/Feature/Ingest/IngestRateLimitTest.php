@@ -51,6 +51,7 @@ class IngestRateLimitTest extends TestCase
         /**
          * create a tenant for the test.
          */
+        /** @var Tenant $tenant */
         $tenant = Tenant::factory()->create();
 
         /**

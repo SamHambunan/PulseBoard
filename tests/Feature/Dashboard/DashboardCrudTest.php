@@ -68,11 +68,13 @@ class DashboardCrudTest extends TestCase
         // create a tenant with an owner and a viewer
         $tenant = Tenant::factory()->create();
 
+        /** @var User $owner */
         $owner = User::factory()->create([
             'tenant_id' => $tenant->id,
             'workspace_role' => 'owner',
         ]);
 
+        /** @var User viewer */
         $viewer = User::factory()->create([
             'tenant_id' => $tenant->id,
             'workspace_role' => 'viewer',
@@ -82,6 +84,7 @@ class DashboardCrudTest extends TestCase
         app()->instance('current.tenant.id', $tenant->id);
 
         // create a dashboard owned by the owner user
+        /** @var Dashboard $dashboard */
         $dashboard = Dashboard::factory()->create([
             'tenant_id' => $tenant->id,
             'created_by' => $owner->id,

@@ -5,6 +5,7 @@ namespace Tests\Feature\Ingest;
 use App\Models\ApiKey;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 /**
@@ -46,6 +47,7 @@ class IngestValidationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Cache::flush();
 
         $tenant = Tenant::factory()->create();
 

@@ -56,6 +56,7 @@ class IngestProducesKafkaTest extends TestCase
         /**
          * create a test tenant.
          */
+        /** @var Tenant $tenant */
         $tenant = Tenant::factory()->create();
 
         /**

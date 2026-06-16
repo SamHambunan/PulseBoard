@@ -19,14 +19,18 @@ class ChannelAuthTest extends TestCase
      * - the request returns a 200 status code
      * - presence channel authentication succeeds
      * - the returned channel data contains the correct user information
-     *
-     * @return void
      */
-    public function test_user_can_authenticate_to_own_tenant_channel()
+    public function test_user_can_authenticate_to_own_tenant_channel(): void
     {
         // create a tenant and a user assigned to that tenant
+
+        /** @var Tenant $tenant */
         $tenant = Tenant::factory()->create();
-        $user = User::factory()->create(['tenant_id' => $tenant->id]);
+
+        /** @var User $user */
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
 
         // attempt to authenticate against the tenant's presence channel
         $response = $this->actingAs($user)->postJson('/api/v1/broadcasting/auth', [
@@ -55,16 +59,22 @@ class ChannelAuthTest extends TestCase
      * - the request returns a 403 forbidden response
      * - channel authorization is denied
      * - tenant isolation rules are enforced
-     *
-     * @return void
      */
-    public function test_user_cannot_authenticate_to_different_tenant_channel()
+    public function test_user_cannot_authenticate_to_different_tenant_channel(): void
     {
         // create tenant a and a user belonging to tenant a
+
+        /** @var Tenant $tenantA */
         $tenantA = Tenant::factory()->create();
-        $userA = User::factory()->create(['tenant_id' => $tenantA->id]);
+
+        /** @var User $userA */
+        $userA = User::factory()->create([
+            'tenant_id' => $tenantA->id,
+        ]);
 
         // create a separate tenant that the user does not belong to
+
+        /** @var Tenant $tenantB */
         $tenantB = Tenant::factory()->create();
 
         // attempt to authenticate to another tenant's channel

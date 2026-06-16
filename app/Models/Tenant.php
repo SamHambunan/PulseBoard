@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tenant extends Model
 {
+    /**
+     * @property int $id
+     */
     use HasFactory,HasUuids;
 
     protected $fillable = [

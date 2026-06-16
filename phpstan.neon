@@ -1,10 +1,16 @@
 includes:
-    - vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon
 
 parameters:
     level: 5
     paths:
         - app
         - tests
+
     excludePaths:
         - vendor/*
+        - storage/*
+        - bootstrap/cache/*
+
+    ignoreErrors:
+        - '#Call to an undefined static method Illuminate\\Support\\Facades#'

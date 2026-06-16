@@ -68,7 +68,7 @@ class ConsumeMetrics extends Command
          * manual offset commit is disabled to allow controlled processing.
          */
         $consumer = Kafka::consumer(['metrics.events'])
-            ->withBrokers(config('services.kafka.brokers', env('KAFKA_BROKERS')))
+            ->withBrokers(config('services.kafka.brokers', config('KAFKA_BROKERS')))
             ->withConsumerGroupId('pulseboard-fanout')
             ->withAutoCommit(false)
             ->withOptions([
