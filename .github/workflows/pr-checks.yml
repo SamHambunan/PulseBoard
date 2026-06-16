@@ -11,10 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           tools: cs2pr
+          extensions: rdkafka, redis, pdo_mysql
+
       - run: composer install --no-interaction --prefer-dist
       - run: ./vendor/bin/pint --test
       - run: ./vendor/bin/phpstan analyse
