@@ -16,7 +16,7 @@ resource "aws_elasticache_subnet_group" "main" {
   subnet_ids = var.private_subnet_ids
 }
 
-# Creates a Serverless Redis cache
+# creates a serverless redis cache
 resource "aws_elasticache_serverless_cache" "redis" {
   engine = "redis"
   name   = "pulseboard-${var.environment}-redis"
