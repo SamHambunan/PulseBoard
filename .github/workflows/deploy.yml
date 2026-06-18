@@ -1,0 +1,52 @@
+name: Deploy to ECS
+
+on:
+  workflow_run:
+    workflows: ["Build and push images"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            us-east-1
+
+      - name: Run DB migrations (ECS one-off task)
+        run: |
+          aws ecs run-task \
+            --cluster pulseboard-prod \
+            --task-definition pulseboard-migrate \
+            --launch-type FARGATE \
+            --network-configuration "awsvpcConfiguration={subnets=[${{ secrets.PRIVATE_SUBNET_IDS }}],securityGroups=[${{ secrets.ECS_SG_ID }}]}" \
+            --overrides '{"containerOverrides":[{"name":"app","command":["php","artisan","migrate","--force"]}]}'
+
+      - name: Deploy API service (rolling update)
+        run: |
+          aws ecs update-service \
+            --cluster pulseboard-prod \
+            --service pulseboard-api \
+            --force-new-deployment
+
+      - name: Deploy Reverb service
+        run: |
+          aws ecs update-service \
+            --cluster pulseboard-prod \
+            --service pulseboard-reverb \
+            --force-new-deployment
+
+      - name: Deploy Consumer service
+        run: |
+          aws ecs update-service \
+            --cluster pulseboard-prod \
+            --service pulseboard-consumer \
+            --force-new-deployment

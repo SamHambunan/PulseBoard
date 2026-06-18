@@ -1,0 +1,49 @@
+name: Build and push images
+
+on:
+  push:
+    branches: [main, develop]
+
+env:
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REPOSITORY: pulseboard
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [api, reverb, consumer]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            us-east-1
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build image
+        run: |
+          docker build \
+            --target ${{ matrix.target }} \
+            --tag $ECR_REGISTRY/$ECR_REPOSITORY:${{ matrix.target }}-${{ github.sha }} \
+            --tag $ECR_REGISTRY/$ECR_REPOSITORY:${{ matrix.target }}-latest \
+            -f docker/php/Dockerfile .
+
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ matrix.target }}-${{ github.sha }}
+          severity: CRITICAL,HIGH
+          exit-code: '1' # fail the build on critical CVEs
+
+      - name: Push to ECR
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ matrix.target }}-${{ github.sha }}
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ matrix.target }}-latest
