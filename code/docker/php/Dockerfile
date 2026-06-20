@@ -83,7 +83,9 @@ FROM base AS local
 
 USER root
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+RUN apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        linux-headers \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && apk del .build-deps
