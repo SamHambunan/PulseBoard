@@ -9,6 +9,11 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: code
+
     steps:
       - uses: actions/checkout@v4
 
@@ -32,6 +37,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: code
 
     services:
       mysql:
@@ -101,6 +110,11 @@ jobs:
 
   security:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: code
+
     steps:
       - uses: actions/checkout@v4
 
