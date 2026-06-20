@@ -99,7 +99,6 @@ class DashboardCrudTest extends TestCase
         );
 
         // verify access is denied
-        dump('Status Code: '.$response->getStatusCode());
         $response->assertStatus(403);
     }
 

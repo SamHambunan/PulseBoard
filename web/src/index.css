@@ -1,0 +1,46 @@
+/* import tailwind v4 directly */
+@import "tailwindcss";
+
+/* define our custom theme variables from the image analysis right in the css */
+@theme {
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-primary: #5d5fef;
+
+    --color-text-main: #151d48;
+    --color-text-muted: #737791;
+
+    --color-accent-pink: #ffe2e5;
+    --color-accent-pinktext: #fa5a7d;
+    --color-accent-orange: #fff4de;
+    --color-accent-orangetext: #ff947a;
+    --color-accent-green: #dcfce7;
+    --color-accent-greentext: #3cd856;
+    --color-accent-purple: #f3e8ff;
+    --color-accent-purpletext: #bf83ff;
+
+    --shadow-soft: 0 4px 20px 0 rgba(0, 0, 0, 0.03);
+
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+
+    --font-sans: "inter", sans-serif;
+}
+
+@layer base {
+    body {
+        /* apply our global background and text colors */
+        background-color: var(--color-background);
+        color: var(--color-text-main);
+    }
+}
+
+@layer components {
+    /* create a reusable card class for our dashboard widgets */
+    .card {
+        background-color: var(--color-surface);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-soft);
+        padding: 1.5rem;
+    }
+}
