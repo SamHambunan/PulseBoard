@@ -20,4 +20,15 @@ export function useCreateDashboard() {
             queryClient.invalidateQueries({ queryKey: ['dashboards'] });
         },
     });
+
+}
+
+export function useDashboard(id: string) {
+    return useQuery({
+        // the query key includes the id so react-query caches each dashboard separately
+        queryKey: ['dashboard', id],
+        queryFn: () => dashboardsApi.get(id).then((res) => res.data.data),
+        // don't try to fetch if we don't have an id yet
+        enabled: !!id,
+    });
 }

@@ -6,12 +6,20 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth';
 import { authApi } from '@/api/auth';
 
-const registerSchema = z.object({
-    name: z.string().min(2, 'name must be at least 2 characters'),
-    tenant_name: z.string().min(2, 'workspace name is required'),
-    email: z.string().email('please enter a valid email address'),
-    password: z.string().min(8, 'password must be at least 8 characters'),
-});
+const registerSchema = z
+    .object({
+        name: z.string().min(2, 'name must be at least 2 characters'),
+        company_name: z.string().min(2, 'workspace name is required'),
+        email: z.email('please enter a valid email address'),
+        password: z.string().min(8, 'password must be at least 8 characters'),
+        password_confirmation: z
+            .string()
+            .min(8, 'password must be at least 8 characters'),
+    })
+    .refine((data) => data.password === data.password_confirmation, {
+        message: 'passwords do not match',
+        path: ['password_confirmation'],
+    });
 
 type RegisterFormInputs = z.infer<typeof registerSchema>;
 
@@ -102,10 +110,10 @@ export default function RegisterPage() {
                                 <input
                                     type="text"
                                     placeholder="acme corp"
-                                    {...register('tenant_name')}
+                                    {...register('company_name')}
                                     className="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-background focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-text-main placeholder:text-gray-400"
                                 />
-                                {errors.tenant_name && <p className="text-accent-pinktext text-xs mt-1.5 font-medium">{errors.tenant_name.message}</p>}
+                                {errors.company_name && <p className="text-accent-pinktext text-xs mt-1.5 font-medium">{errors.company_name.message}</p>}
                             </div>
 
                             <div>
@@ -129,6 +137,17 @@ export default function RegisterPage() {
                                 />
                                 {errors.password && <p className="text-accent-pinktext text-xs mt-1.5 font-medium">{errors.password.message}</p>}
                             </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold mb-1.5 text-text-main">password confirmation</label>
+                                <input
+                                    type="password"
+                                    placeholder="••••••••"
+                                    {...register('password_confirmation')}
+                                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-background focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-text-main placeholder:text-gray-400"
+                                />
+                                {errors.password_confirmation && <p className="text-accent-pinktext text-xs mt-1.5 font-medium">{errors.password_confirmation.message}</p>}
+                            </div>s
 
                             <button
                                 type="submit"

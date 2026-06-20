@@ -4,6 +4,7 @@ import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import DashboardListPage from '@/pages/dashboard/DashboardListPage';
+import DashboardDetailPage from '@/pages/dashboard/DashboardDetailPage';
 
 function GuestRoute() {
     const token = useAuthStore((s) => s.token);
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
         children: [
             // map the /dashboards route to our new grid page
             { path: '/dashboards', element: <DashboardListPage /> },
+            { path: '/dashboards/:id', element: <DashboardDetailPage /> },
         ],
     },
     {

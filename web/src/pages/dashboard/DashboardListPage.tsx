@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useDashboards, useCreateDashboard } from '@/hooks/useDashboards';
+import { useNavigate } from 'react-router-dom';
 
 export default function DashboardListPage() {
     const { data: dashboards, isLoading } = useDashboards();
     const createMutation = useCreateDashboard();
     const [isCreating, setIsCreating] = useState(false);
+    const navigate = useNavigate();
 
     const handleCreate = () => {
         // just a quick prompt for now, we will build a real modal later
@@ -27,10 +29,13 @@ export default function DashboardListPage() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-
-            {/* render existing dashboards */}
             {dashboards?.map((dashboard) => (
-                <div key={dashboard.id} className="card group cursor-pointer hover:-translate-y-1 transition-all duration-300">
+                // 3. add onClick to the card div!
+                <div
+                    key={dashboard.id}
+                    onClick={() => navigate(`/dashboards/${dashboard.id}`)}
+                    className="card group cursor-pointer hover:-translate-y-1 transition-all duration-300"
+                >
                     <div className="flex justify-between items-start mb-4">
                         <div className="w-10 h-10 rounded-xl bg-accent-purple/50 flex items-center justify-center text-accent-purpletext">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

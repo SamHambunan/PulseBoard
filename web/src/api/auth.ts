@@ -11,7 +11,8 @@ export interface RegisterPayload {
     name: string;
     email: string;
     password: string;
-    tenant_name: string;
+    password_confirmation: string;
+    company_name: string;
 }
 
 export const authApi = {
