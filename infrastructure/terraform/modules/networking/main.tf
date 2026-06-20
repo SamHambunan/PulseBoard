@@ -8,10 +8,40 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 }
 
-# Private Subnets (No direct internet access - Highly Secure)
+# private subnets (No direct internet access - Highly Secure)
 resource "aws_subnet" "private" {
   count             = 2
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
   availability_zone = data.aws_availability_zones.available.names[count.index]
+}
+
+# the internet gateway allows the VPC to talk to the outside world
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+}
+
+# public subnets (For the Load Balancer)
+resource "aws_subnet" "public" {
+  count                   = 2
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index + 2) # offsets the CIDR so it doesn't overlap with private
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  map_public_ip_on_launch = true # this makes it "Public"
+}
+
+# routing Table for public subnets
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+}
+
+resource "aws_route_table_association" "public" {
+  count          = 2
+  subnet_id      = aws_subnet.public[count.index].id
+  route_table_id = aws_route_table.public.id
 }

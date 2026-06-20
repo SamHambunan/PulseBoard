@@ -55,3 +55,19 @@ module "rds" {
   vpc_id             = module.networking.vpc_id
   private_subnet_ids = module.networking.private_subnet_ids
 }
+# call the ALB (Load Balancer) Module
+module "alb" {
+  source            = "./modules/alb"
+  environment       = var.environment
+  vpc_id            = module.networking.vpc_id
+  public_subnet_ids = module.networking.public_subnet_ids
+}
+
+# call the ECS (Application Servers) Module
+module "ecs" {
+  source               = "./modules/ecs"
+  environment          = var.environment
+  vpc_id               = module.networking.vpc_id
+  private_subnet_ids   = module.networking.private_subnet_ids
+  alb_target_group_arn = module.alb.target_group_arn
+}
